@@ -3,13 +3,13 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github-creds', url: 'https://github.com/Desmondotutu/web_image_test.git']]])
+            step {
+                git url: 'https://github.com/Desmondotutu/web_image_test.git'
             }
         }
 
         stage('SonarQube Scan') {
-            steps {
+            step {
                 withSonarQubeEnv('My SonarQube Server') {
                     sh 'mvn sonar:sonar'
                 }
@@ -17,7 +17,7 @@ pipeline {
         }
 
         stage('Docker Build & Push') {
-            steps {
+            step {
                 script {
                     def app = docker.build("desmondo1/webapp:${env.BUILD_NUMBER}")
                     app.tag("desmondo1/webapp:tagname")
