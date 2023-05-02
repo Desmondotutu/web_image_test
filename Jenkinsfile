@@ -3,13 +3,13 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            step {
+            steps {
                 git url: 'https://github.com/Desmondotutu/web_image_test.git'
             }
         }
 
         stage('SonarQube Scan') {
-            step {
+            steps {
                 withSonarQubeEnv('My SonarQube Server') {
                     sh 'mvn sonar:sonar'
                 }
@@ -17,7 +17,7 @@ pipeline {
         }
 
         stage('Docker Build & Push') {
-            step {
+            steps {
                 script {
                     def app = docker.build("desmondo1/webapp:${env.BUILD_NUMBER}")
                     app.tag("desmondo1/webapp:tagname")
