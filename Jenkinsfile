@@ -8,12 +8,6 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv('My SonarQube Server') {
