@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         registry = "desmondo1/webapp"
-        registryCredential = 'dockerhub-creds'
+        registryCredential = 'docker-hub-creds'
     }
     
     stages {
