@@ -16,17 +16,17 @@ pipeline {
             }
         }
 
-    stage('Docker Build & Push') {
-        steps {
-            script {
-                def registry = "desmondo1/webapp"
-                def dockerImage = docker.build(registry + ":${env.BUILD_NUMBER}", "-f Dockerfile .")
-                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
-                    dockerImage.push("${env.BUILD_NUMBER}")
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    def registry = "desmondo1/webapp"
+                    def dockerImage = docker.build(registry + ":${env.BUILD_NUMBER}", "-f Dockerfile .")
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
+                        dockerImage.push("${env.BUILD_NUMBER}")
+                    }
                 }
             }
         }
-    }
 
     post {
         always {
