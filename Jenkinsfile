@@ -1,45 +1,47 @@
 pipeline {
     agent any
+    
+    environment {
+        registry = "desmondo1/webapp"
+        registryCredential = 'dockerhub-creds'
+    }
+    
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Desmondotutu/web_image_test.git',
-                    branch: 'main'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], 
+                userRemoteConfigs: [[url: 'https://github.com/Desmondotutu/web_image_test.git']]])
             }
         }
-
-        stage('SonarQube Scan') {
+        
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        
+        stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube-Server') {
                     sh 'mvn sonar:sonar'
                 }
             }
         }
-
+        
         stage('Docker Build & Push') {
             steps {
-                sh {
-                    def registry = "desmondo1/webapp"
-                    def dockerImage = docker.build(registry + ":${env.BUILD_NUMBER}", "-f Dockerfile .")
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
-                        dockerImage.push("${env.BUILD_NUMBER}")
+                script {
+                    def dockerImage = docker.build("${registry}:${env.BUILD_NUMBER}", "-f Dockerfile .")
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                        dockerImage.push()
                     }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
-        }
-
-        success {
-            echo 'Successfully built and deployed Docker image'
-        }
-
-        failure {
-            echo 'Build failed'
         }
     }
 }
