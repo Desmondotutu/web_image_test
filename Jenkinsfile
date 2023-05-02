@@ -18,7 +18,7 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                script {
+                sh {
                     def registry = "desmondo1/webapp"
                     def dockerImage = docker.build(registry + ":${env.BUILD_NUMBER}", "-f Dockerfile .")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
@@ -27,6 +27,7 @@ pipeline {
                 }
             }
         }
+    }
 
     post {
         always {
@@ -41,5 +42,4 @@ pipeline {
             echo 'Build failed'
         }
     }
-}
 }
