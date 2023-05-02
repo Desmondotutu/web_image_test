@@ -14,10 +14,13 @@ pipeline {
             }
         }
         
-        stage('SonarQube analysis') {
+        stage('SonarQube Scan') {
             steps {
+                script {
+                        sh 'npm install sonarqube-scanner --global'
+                }
                 withSonarQubeEnv('Sonarqube-Server') {
-                    sh 'mvn sonar:sonar'
+                    sh 'sonar-scanner'
                 }
             }
         }
