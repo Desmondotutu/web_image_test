@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Desmondotutu/web_image_test.git'
+                git url: 'https://github.com/Desmondotutu/web_image_test.git',
+                    branch: 'main'
             }
         }
 
