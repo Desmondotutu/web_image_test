@@ -14,17 +14,6 @@ pipeline {
             }
         }
         
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube-Server') {
