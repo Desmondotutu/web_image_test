@@ -16,14 +16,13 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-            steps {
-                script {
-                    def app = docker.build("desmondo1/webapp:${env.BUILD_NUMBER}")
-                    app.tag("desmondo1/webapp:tagname")
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
-                        app.push()
-                    }
+    stage('Docker Build & Push') {
+        steps {
+            script {
+                def registry = "desmondo1/webapp"
+                def dockerImage = docker.build(registry + ":${env.BUILD_NUMBER}", "-f Dockerfile .")
+                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
+                    dockerImage.push("${env.BUILD_NUMBER}")
                 }
             }
         }
