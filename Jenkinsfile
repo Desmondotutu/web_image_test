@@ -4,6 +4,7 @@ pipeline {
     environment {
         registry = "desmondo1/webapp"
         registryCredential = 'docker-hub-creds'
+        SCANNER_HOME = tool 'sonar-scanner'
     }
     stages {
         stage('Checkout') {
@@ -16,7 +17,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') {
-                    sh 'sonar-scanner/bin -Dsonar.projectKey=tester-project -Dsonar.sources=. '
+                    sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=tester-project -Dsonar.sources=. '
                 }
             }
         }
