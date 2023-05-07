@@ -17,9 +17,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') {
-                    sh 'Sonarqube \
+                    sh '''Sonarqube \
                     -Dsonar.projectKey=tester-project \
-                    -Dsonar.sources=. \
+                    -Dsonar.sources=. \ '''
                 }
             }
         }
