@@ -13,16 +13,12 @@ pipeline {
                 userRemoteConfigs: [[url: 'https://github.com/Desmondotutu/web_image_test.git']]])
             }
         }
-        
-        stage('SonarQube Scan') {
-            steps {
-                script {
-                        sh 'npm install sonarqube-scanner --global'
+
+      stage('SonarQube Analysis') {
+                def scannerHome = tool 'SonarScanner';
+                withSonarQubeEnv() {
+                  sh "${scannerHome}/bin/sonar-scanner"
                 }
-                withSonarQubeEnv('Sonarqube-Server') {
-                    sh 'sonar-scanner'
-                }
-            }
         }
         
         stage('Docker Build & Push') {
