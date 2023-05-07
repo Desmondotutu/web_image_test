@@ -6,7 +6,7 @@ pipeline {
         registryCredential = 'docker-hub-creds'
     }
     tools {
-        SonarScanner 'SonarScanner'
+        SonarScanner 'Sonarqube'
     }
     stages {
         stage('Checkout') {
@@ -19,7 +19,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') {
-                    sh 'sonar-scanner \
+                    sh 'Sonarqube \
                     -Dsonar.projectKey=tester-project \
                     -Dsonar.sources=. \
                 }
