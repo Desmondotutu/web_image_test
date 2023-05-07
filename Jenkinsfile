@@ -19,7 +19,7 @@ pipeline {
                 withSonarQubeEnv('SonarServer') {
                     sh '''Sonarqube \
                     -Dsonar.projectKey=tester-project \
-                    -Dsonar.sources=. \ '''
+                    -Dsonar.sources=. '''
                 }
             }
         }
