@@ -21,6 +21,12 @@ pipeline {
                 }
             }
         }
+        stage('OWASP DP Check') {
+            steps {
+             dependencyCheck additionalArguments: ' --scan ./ ', odcInstallation: 'DP-Check'
+             dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
         
         stage('Docker Build & Push') {
             steps {
